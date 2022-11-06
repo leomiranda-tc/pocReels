@@ -1,12 +1,10 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, Alert} from 'react-native';
+import {Text, Alert} from 'react-native';
 
-import {Container, Button} from './styles';
+import {Container, Button, VideoContainer} from './styles';
 import RNVideoEditor from 'react-native-video-editor';
 import * as ImagePicker from 'react-native-image-picker';
-import Video from 'react-native-video';
 import useFiles from '@src/hooks/useFiles';
-// https://stackoverflow.com/questions/41663002/react-rctbridgemodule-h-file-not-found
 
 export default function Home() {
   const videos = useFiles(state => state.files);
@@ -45,10 +43,7 @@ export default function Home() {
           console.log('ImagePicker Error: ', response.errorCode);
           return;
         }
-        if (!response.assets) {
-          return;
-        }
-        if (!response.assets[0].uri) {
+        if (!response.assets || !response.assets[0].uri) {
           return;
         }
 
@@ -67,11 +62,7 @@ export default function Home() {
   return (
     <>
       <Container>
-        <Video
-          source={{uri: preview}}
-          style={styles.backgroundVideo}
-          controls
-        />
+        <VideoContainer source={{uri: preview}} controls />
       </Container>
 
       <Container>
@@ -88,15 +79,3 @@ export default function Home() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  backgroundVideo: {
-    position: 'absolute',
-    backgroundColor: 'black',
-    height: '100%',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-  },
-});

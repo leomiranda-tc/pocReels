@@ -10,4 +10,7 @@
    <FileRef
       location = "group:pocReels.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:pocReels.xcodeproj">
+   </FileRef>
 </Workspace>
