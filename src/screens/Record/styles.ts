@@ -18,19 +18,9 @@ export const CameraContainer = styled(Camera)`
 `;
 
 export const Button = styled.TouchableOpacity`
-  width: 50px;
-  height: 50px;
   justify-content: center;
   display: flex;
-  border-width: 2px;
-  border-radius: 10px;
   margin: 10px;
-  border-color: #fff;
-`;
-
-export const ButtonText = styled.Text`
-  color: #fff;
-  text-align: center;
 `;
 
 export const TopWrapper = styled.View`

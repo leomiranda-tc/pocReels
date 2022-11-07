@@ -2,11 +2,11 @@ import useFiles from '@src/hooks/useFiles';
 import React, {useCallback, useEffect, useState, useMemo, useRef} from 'react';
 import {Alert} from 'react-native';
 import {useCameraDevices, Camera} from 'react-native-vision-camera';
+import Icon from 'react-native-vector-icons/AntDesign';
 import {
   Button,
   ButtonRecord,
   BottomWrapper,
-  ButtonText,
   BottomTimeline,
   CameraContainer,
   Container,
@@ -111,16 +111,17 @@ export default function Record({navigation}) {
         isActive={true}>
         <TopWrapper>
           <Button onPress={close}>
-            <ButtonText>X</ButtonText>
+            <Icon name="close" size={30} color="#FFF" />
           </Button>
         </TopWrapper>
+
         <BottomWrapper>
           <Button onPress={changeCamera}>
-            <ButtonText>SW</ButtonText>
+            <Icon name="retweet" size={30} color="#FFF" />
           </Button>
           <ButtonRecord onPress={record} recording={recording} />
           <Button onPress={goToNext}>
-            <ButtonText> {'>'} </ButtonText>
+            <Icon name="right" size={30} color="#FFF" />
           </Button>
         </BottomWrapper>
 
