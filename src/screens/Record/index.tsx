@@ -4,15 +4,13 @@ import {Alert} from 'react-native';
 import {useCameraDevices, Camera} from 'react-native-vision-camera';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {
-  Button,
   ButtonRecord,
   BottomWrapper,
   BottomTimeline,
   CameraContainer,
-  Container,
   Timeline,
-  TopWrapper,
 } from './styles';
+import {Button, TopWrapper, Container} from '@src/styles';
 import * as ImagePicker from 'react-native-image-picker';
 
 import {getPermissions} from './utils';
@@ -194,11 +192,11 @@ export default function Record({navigation}) {
         audio
         isActive={true}>
         <TopWrapper>
-          <Button onPress={showGallery}>
-            <Icon name="addfolder" size={30} color="#FFF" />
-          </Button>
           <Button onPress={close}>
             <Icon name="close" size={30} color="#FFF" />
+          </Button>
+          <Button onPress={showGallery}>
+            <Icon name="addfolder" size={30} color="#FFF" />
           </Button>
         </TopWrapper>
 

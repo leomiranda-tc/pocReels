@@ -2,37 +2,12 @@ import styled from 'styled-components/native';
 import {PropsRecordButton, PropsTimeline} from './types';
 import {Camera} from 'react-native-vision-camera';
 
-export const Container = styled.View`
-  flex: 1;
-  background-color: #000;
-  align-items: center;
-  justify-content: center;
-`;
-
 export const CameraContainer = styled(Camera)`
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
   bottom: 20px;
-`;
-
-export const Button = styled.TouchableOpacity`
-  justify-content: center;
-  display: flex;
-  margin: 10px;
-`;
-
-export const TopWrapper = styled.View`
-  width: 90%;
-  position: absolute;
-  top: 70px;
-  left: 5%;
-  right: 5%;
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  justify-content: space-between;
 `;
 
 export const BottomWrapper = styled.View`

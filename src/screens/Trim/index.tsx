@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {WrapperSlide} from './styles';
 import {RangeSlider} from '@sharcoux/slider';
 import {MAX_DURATION_VIDEO} from '@src/constants';
@@ -8,11 +8,13 @@ import {selectClearAll, selectFiles} from '@src/hooks/useFiles/selectors';
 import useFiles from '@src/hooks/useFiles';
 import {VideoContainer} from '@src/components/Player/styles';
 import Video from 'react-native-video';
-import {StyleSheet} from 'react-native';
+import {Alert, StyleSheet} from 'react-native';
+import {Button, Container, TopWrapper} from '@src/styles';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 let debounceTimer;
 
-const Trim = () => {
+const Trim = ({navigation}) => {
   const playerRef = useRef<Video>(null);
   const [file] = useFiles(selectFiles);
   const clearAll = useFiles(selectClearAll);
@@ -36,10 +38,27 @@ const Trim = () => {
     });
   }
 
+  const close = useCallback(() => {
+    Alert.alert('Atenção', 'Deseja desistir do conteúdo?', [
+      {
+        text: 'Sim',
+        onPress: navigation.goBack,
+      },
+      {
+        text: 'Cancelar',
+        style: 'cancel',
+      },
+    ]);
+  }, [navigation.goBack]);
+
   function onProgressVideo({currentTime}) {
     if (currentTime >= rangeTime.end) {
       playerRef.current?.seek(rangeTime.start);
     }
+  }
+
+  function trimVideo() {
+    console.log('implement ffmpeg');
   }
 
   useEffect(() => {
@@ -59,7 +78,16 @@ const Trim = () => {
   }, [rangeTime.start]);
 
   return (
-    <>
+    <Container>
+      <TopWrapper>
+        <Button onPress={close}>
+          <Icon name="close" size={30} color="#FFF" />
+        </Button>
+        <Button onPress={trimVideo}>
+          <Icon name="right" size={30} color="#FFF" />
+        </Button>
+      </TopWrapper>
+
       <VideoContainer
         ref={playerRef}
         source={{uri: file.uri}}
@@ -83,7 +111,7 @@ const Trim = () => {
           slideOnTap
         />
       </WrapperSlide>
-    </>
+    </Container>
   );
 };
 
