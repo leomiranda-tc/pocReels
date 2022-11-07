@@ -1,10 +1,20 @@
 import useFiles from '@src/hooks/useFiles';
 import React, {useCallback, useEffect, useState, useMemo, useRef} from 'react';
-import {StyleSheet, Alert} from 'react-native';
+import {Alert} from 'react-native';
 import {useCameraDevices, Camera} from 'react-native-vision-camera';
-import {Button, ButtonRecord, BottomWrapper, ButtonText} from './styles';
+import {
+  Button,
+  ButtonRecord,
+  BottomWrapper,
+  ButtonText,
+  BottomTimeline,
+  CameraContainer,
+  Container,
+  Timeline,
+} from './styles';
 
 import {getPermissions} from './utils';
+import {MAX_DURATION_VIDEO} from '@src/constants';
 
 export default function Record({navigation}) {
   const cameraRef = useRef<Camera>(null);
@@ -12,6 +22,7 @@ export default function Record({navigation}) {
   const [frontCamera, setFrontCamera] = useState(true);
   const [recording, setRecording] = useState(false);
   const setVideos = useFiles(state => state.setFiles);
+  const files = useFiles(state => state.files);
 
   const device = useMemo(
     () => (frontCamera ? devices.front : devices.back),
@@ -46,6 +57,17 @@ export default function Record({navigation}) {
     });
   }, [recording, setVideos]);
 
+  const TimelineDuration = useMemo(() => {
+    return (
+      <BottomTimeline>
+        {files.map(file => {
+          const percentual = (file.duration / MAX_DURATION_VIDEO) * 100 + '%';
+          return <Timeline width={percentual} />;
+        })}
+      </BottomTimeline>
+    );
+  }, [files]);
+
   useEffect(() => {
     getPermissions();
   }, []);
@@ -55,22 +77,24 @@ export default function Record({navigation}) {
   }
 
   return (
-    <Camera
-      ref={cameraRef}
-      style={StyleSheet.absoluteFill}
-      device={device}
-      video
-      audio
-      isActive={true}>
-      <BottomWrapper>
-        <Button onPress={changeCamera}>
-          <ButtonText>SW</ButtonText>
-        </Button>
-        <ButtonRecord onPress={record} recording={recording} />
-        <Button>
-          <ButtonText onPress={goToNext}> {'>'} </ButtonText>
-        </Button>
-      </BottomWrapper>
-    </Camera>
+    <Container>
+      <CameraContainer
+        ref={cameraRef}
+        device={device}
+        video
+        audio
+        isActive={true}>
+        <BottomWrapper>
+          <Button onPress={changeCamera}>
+            <ButtonText>SW</ButtonText>
+          </Button>
+          <ButtonRecord onPress={record} recording={recording} />
+          <Button>
+            <ButtonText onPress={goToNext}> {'>'} </ButtonText>
+          </Button>
+        </BottomWrapper>
+        {TimelineDuration}
+      </CameraContainer>
+    </Container>
   );
 }

@@ -5,5 +5,6 @@ export type File = {
 
 export type FilesProps = {
   files: File[];
+  totalDuration: number;
   setFiles: (file: File) => void;
 };
