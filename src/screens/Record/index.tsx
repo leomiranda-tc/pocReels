@@ -48,7 +48,7 @@ export default function Record({navigation}) {
   }, [clearAll]);
 
   const goToNext = useCallback(() => {
-    navigation.navigate('Home');
+    navigation.navigate('Preview');
   }, [navigation]);
 
   const record = useCallback(() => {
@@ -119,8 +119,8 @@ export default function Record({navigation}) {
             <ButtonText>SW</ButtonText>
           </Button>
           <ButtonRecord onPress={record} recording={recording} />
-          <Button>
-            <ButtonText onPress={goToNext}> {'>'} </ButtonText>
+          <Button onPress={goToNext}>
+            <ButtonText> {'>'} </ButtonText>
           </Button>
         </BottomWrapper>
 

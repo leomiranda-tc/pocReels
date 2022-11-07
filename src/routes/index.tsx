@@ -1,7 +1,7 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Home from '@src/screens/Home';
+import Preview from '@src/screens/Preview';
 import Record from '@src/screens/Record';
 
 const Stack = createNativeStackNavigator();
@@ -14,7 +14,7 @@ function App() {
           headerShown: false,
         }}>
         <Stack.Screen name="Record" component={Record} />
-        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Preview" component={Preview} />
       </Stack.Navigator>
     </NavigationContainer>
   );

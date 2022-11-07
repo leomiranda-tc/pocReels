@@ -6,7 +6,7 @@ import RNVideoEditor from 'react-native-video-editor';
 import useFiles from '@src/hooks/useFiles';
 import {selectFiles} from '@src/hooks/useFiles/selectors';
 
-export default function Home() {
+export default function Preview() {
   const files = useFiles(selectFiles);
   const [preview, setPreview] = useState<string>('');
 
