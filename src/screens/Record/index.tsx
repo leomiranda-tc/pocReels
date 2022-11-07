@@ -48,14 +48,25 @@ export default function Record({navigation}) {
   }, []);
 
   const close = useCallback(() => {
-    clearAll();
+    Alert.alert('Atenção', 'Deseja desistir do conteúdo?', [
+      {
+        text: 'Sim',
+        onPress: clearAll,
+      },
+      {
+        text: 'Cancelar',
+        style: 'cancel',
+      },
+    ]);
   }, [clearAll]);
 
   const goToPreview = useCallback(() => {
     navigation.navigate('Preview');
   }, [navigation]);
 
-  function showGallery() {
+  function launchGallery() {
+    clearAll();
+
     ImagePicker.launchImageLibrary(
       {
         mediaType: 'video',
@@ -88,6 +99,24 @@ export default function Record({navigation}) {
         navigation.navigate('Trim');
       },
     );
+  }
+
+  function showGallery() {
+    if (totalDuration > 0) {
+      Alert.alert('Atenção', 'Deseja desistir do conteúdo?', [
+        {
+          text: 'Sim',
+          onPress: launchGallery,
+        },
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+      ]);
+      return;
+    }
+
+    launchGallery();
   }
 
   function stopRecord() {

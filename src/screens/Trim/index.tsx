@@ -73,7 +73,7 @@ const Trim = () => {
           onValueChange={onRangeChange}
           minimumValue={0}
           maximumValue={file.duration}
-          minimumRange={5}
+          minimumRange={2}
           outboundColor="#ddd"
           inboundColor="red"
           thumbTintColor="#000"
