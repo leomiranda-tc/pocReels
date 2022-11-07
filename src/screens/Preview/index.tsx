@@ -45,5 +45,5 @@ export default function Preview() {
     );
   }
 
-  return <VideoContainer source={{uri: preview}} controls />;
+  return <VideoContainer source={{uri: preview}} repeat resizeMode="cover" />;
 }
