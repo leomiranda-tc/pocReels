@@ -11,11 +11,16 @@ import {
   CameraContainer,
   Container,
   Timeline,
+  TopWrapper,
 } from './styles';
 
 import {getPermissions} from './utils';
 import {MAX_DURATION_VIDEO} from '@src/constants';
-import {selectFiles, selectSetFiles} from '@src/hooks/useFiles/selectors';
+import {
+  selectClearAll,
+  selectFiles,
+  selectSetFile,
+} from '@src/hooks/useFiles/selectors';
 
 let counterDurationRecording;
 
@@ -25,8 +30,9 @@ export default function Record({navigation}) {
   const [frontCamera, setFrontCamera] = useState(true);
   const [recording, setRecording] = useState(false);
   const [durationRecording, setDurationRecording] = useState(0);
-  const setVideos = useFiles(selectSetFiles);
+  const setVideos = useFiles(selectSetFile);
   const files = useFiles(selectFiles);
+  const clearAll = useFiles(selectClearAll);
 
   const device = useMemo(
     () => (frontCamera ? devices.front : devices.back),
@@ -36,6 +42,10 @@ export default function Record({navigation}) {
   const changeCamera = useCallback(() => {
     setFrontCamera(oldState => !oldState);
   }, []);
+
+  const close = useCallback(() => {
+    clearAll();
+  }, [clearAll]);
 
   const goToNext = useCallback(() => {
     navigation.navigate('Home');
@@ -99,6 +109,11 @@ export default function Record({navigation}) {
         video
         audio
         isActive={true}>
+        <TopWrapper>
+          <Button onPress={close}>
+            <ButtonText>X</ButtonText>
+          </Button>
+        </TopWrapper>
         <BottomWrapper>
           <Button onPress={changeCamera}>
             <ButtonText>SW</ButtonText>
@@ -108,6 +123,7 @@ export default function Record({navigation}) {
             <ButtonText onPress={goToNext}> {'>'} </ButtonText>
           </Button>
         </BottomWrapper>
+
         {TimelineDuration}
       </CameraContainer>
     </Container>

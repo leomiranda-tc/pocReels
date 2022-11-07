@@ -19,20 +19,36 @@ export const CameraContainer = styled(Camera)`
 
 export const Button = styled.TouchableOpacity`
   width: 50px;
+  height: 50px;
+  justify-content: center;
+  display: flex;
   border-width: 2px;
-  padding: 10px;
+  border-radius: 10px;
   margin: 10px;
   border-color: #fff;
 `;
 
 export const ButtonText = styled.Text`
   color: #fff;
+  text-align: center;
+`;
+
+export const TopWrapper = styled.View`
+  width: 90%;
+  position: absolute;
+  top: 70px;
+  left: 5%;
+  right: 5%;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 export const BottomWrapper = styled.View`
   width: 90%;
   position: absolute;
-  bottom: 10%;
+  bottom: 70px;
   left: 5%;
   right: 5%;
   display: flex;
@@ -60,6 +76,6 @@ export const Timeline = styled.View<PropsTimeline>`
 export const ButtonRecord = styled.TouchableOpacity<PropsRecordButton>`
   width: 70px;
   height: 70px;
-  border-radius: ${props => (props.recording ? 10 : 100)};
+  border-radius: ${props => (props.recording ? 10 : 100)}px;
   background-color: red;
 `;
