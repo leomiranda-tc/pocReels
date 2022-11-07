@@ -4,13 +4,18 @@ import {RangeSlider} from '@sharcoux/slider';
 import {MAX_DURATION_VIDEO} from '@src/constants';
 import {isBiggerThanMax} from './utils';
 import {RangeProps} from './types';
-import {selectClearAll, selectFiles} from '@src/hooks/useFiles/selectors';
+import {
+  selectClearAll,
+  selectFiles,
+  selectUpdateFile,
+} from '@src/hooks/useFiles/selectors';
 import useFiles from '@src/hooks/useFiles';
 import {VideoContainer} from '@src/components/Player/styles';
 import Video from 'react-native-video';
 import {Alert, StyleSheet} from 'react-native';
 import {Button, Container, TopWrapper} from '@src/styles';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {FFmpegKit, ReturnCode} from 'ffmpeg-kit-react-native';
 
 let debounceTimer;
 
@@ -18,6 +23,7 @@ const Trim = ({navigation}) => {
   const playerRef = useRef<Video>(null);
   const [file] = useFiles(selectFiles);
   const clearAll = useFiles(selectClearAll);
+  const updateFile = useFiles(selectUpdateFile);
   const [rangeTime, setRangeTime] = useState<RangeProps>({
     start: 0,
     end:
@@ -58,7 +64,26 @@ const Trim = ({navigation}) => {
   }
 
   function trimVideo() {
-    console.log('implement ffmpeg');
+    const outputName =
+      '/var/mobile/Containers/Data/Application/E0388886-DAC8-430D-B1C5-4514A2CA5F47/tmp/output2.mp4';
+
+    FFmpegKit.execute(
+      `-ss 00:00:05 -to 00:00:15 -i ${file.uri} -c copy ${outputName}`,
+    ).then(async session => {
+      const returnCode = await session.getReturnCode();
+
+      if (ReturnCode.isSuccess(returnCode)) {
+        updateFile(0, {
+          uri: outputName,
+          duration: rangeTime.end - rangeTime.start,
+        });
+        navigation.navigate('Preview');
+
+        return;
+      }
+
+      console.log('ERROR or CANCEL', returnCode);
+    });
   }
 
   useEffect(() => {

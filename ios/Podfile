@@ -7,6 +7,7 @@ install! 'cocoapods', :deterministic_uuids => false
 production = ENV["PRODUCTION"] == "1"
 
 target 'pocReels' do
+  pod 'ffmpeg-kit-react-native/video-lts', :podspec => '../node_modules/ffmpeg-kit-react-native/ffmpeg-kit-react-native.podspec'
   config = use_native_modules!
 
   # Flags change depending on the env values.

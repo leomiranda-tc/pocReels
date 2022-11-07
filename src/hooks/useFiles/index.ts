@@ -16,6 +16,21 @@ const useFiles = create<FilesProps>(set => ({
       totalDuration: state.totalDuration + file.duration,
     }));
   },
+  updateFile: (index: number, file: File) => {
+    file.uri = file.uri
+      .replace('%2540', '%40')
+      .replace('%252F', '%2F')
+      .replace('file://', '');
+
+    set((state: FilesProps) => {
+      state.files[index] = file;
+
+      return {
+        files: [...state.files],
+        totalDuration: state.totalDuration + file.duration,
+      };
+    });
+  },
   clearAll: () =>
     set(() => ({
       files: [],

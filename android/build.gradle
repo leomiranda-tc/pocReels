@@ -2,6 +2,7 @@
 
 buildscript {
     ext {
+        ffmpegKitPackage = "video"
         buildToolsVersion = "31.0.0"
         minSdkVersion = 21
         compileSdkVersion = 31
