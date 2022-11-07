@@ -129,6 +129,9 @@ export default function Record({navigation}) {
         audio
         isActive={true}>
         <TopWrapper>
+          <Button>
+            <Icon name="addfolder" size={30} color="#FFF" />
+          </Button>
           <Button onPress={close}>
             <Icon name="close" size={30} color="#FFF" />
           </Button>

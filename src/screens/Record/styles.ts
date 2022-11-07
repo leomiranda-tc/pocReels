@@ -54,13 +54,14 @@ export const BottomTimeline = styled.View`
   bottom: 0;
   display: flex;
   flex-direction: row;
-  height: 10px;
+  height: 5px;
 `;
 
 export const Timeline = styled.View<PropsTimeline>`
   width: ${props => props.width};
   background: red;
-  border: 1px solid #ddd;
+  border-left-width: 1px;
+  border-color: #ddd;
 `;
 
 export const ButtonRecord = styled.TouchableOpacity<PropsRecordButton>`
