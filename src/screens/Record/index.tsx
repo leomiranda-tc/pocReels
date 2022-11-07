@@ -15,11 +15,13 @@ import {
 } from './styles';
 
 import {getPermissions} from './utils';
+import {PROGRESS_TIME_MILLISECONDS, PROGRESS_TIME_SECONDS} from './constants';
 import {MAX_DURATION_VIDEO} from '@src/constants';
 import {
   selectClearAll,
   selectFiles,
   selectSetFile,
+  selectTotalDuration,
 } from '@src/hooks/useFiles/selectors';
 
 let counterDurationRecording;
@@ -32,6 +34,7 @@ export default function Record({navigation}) {
   const [durationRecording, setDurationRecording] = useState(0);
   const setVideos = useFiles(selectSetFile);
   const files = useFiles(selectFiles);
+  const totalDuration = useFiles(selectTotalDuration);
   const clearAll = useFiles(selectClearAll);
 
   const device = useMemo(
@@ -51,23 +54,39 @@ export default function Record({navigation}) {
     navigation.navigate('Preview');
   }, [navigation]);
 
+  function stopRecord() {
+    setRecording(false);
+    setDurationRecording(0);
+    clearInterval(counterDurationRecording);
+
+    cameraRef?.current?.stopRecording();
+  }
+
+  const countDurationRecording = useCallback(
+    (old: number): number => {
+      if (totalDuration + old + PROGRESS_TIME_SECONDS >= MAX_DURATION_VIDEO) {
+        stopRecord();
+      }
+
+      return old + PROGRESS_TIME_SECONDS;
+    },
+    [totalDuration],
+  );
+
   const record = useCallback(() => {
-    setRecording(oldState => !oldState);
-
     if (recording) {
-      setDurationRecording(0);
-      clearInterval(counterDurationRecording);
-
-      cameraRef?.current?.stopRecording();
+      stopRecord();
       return;
     }
 
+    setRecording(true);
+
     counterDurationRecording = setInterval(() => {
-      setDurationRecording(old => old + 0.25);
-    }, 250);
+      setDurationRecording(countDurationRecording);
+    }, PROGRESS_TIME_MILLISECONDS);
 
     cameraRef?.current?.startRecording({
-      flash: 'on',
+      flash: 'off',
       onRecordingFinished: video => {
         setVideos({
           uri: video.path,
@@ -76,7 +95,7 @@ export default function Record({navigation}) {
       },
       onRecordingError: error => Alert.alert(error.message),
     });
-  }, [recording, setVideos]);
+  }, [countDurationRecording, recording, setVideos]);
 
   const TimelineDuration = useMemo(() => {
     return (
