@@ -66,7 +66,7 @@ export default function Record({navigation}) {
         <Button onPress={changeCamera}>
           <ButtonText>SW</ButtonText>
         </Button>
-        <ButtonRecord onPress={record} />
+        <ButtonRecord onPress={record} recording={recording} />
         <Button>
           <ButtonText onPress={goToNext}> {'>'} </ButtonText>
         </Button>

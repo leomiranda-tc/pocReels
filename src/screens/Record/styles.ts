@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import {PropsRecordButton} from './types';
 
 export const Button = styled.TouchableOpacity`
   width: 50px;
@@ -24,9 +25,9 @@ export const BottomWrapper = styled.View`
   justify-content: space-between;
 `;
 
-export const ButtonRecord = styled.TouchableOpacity`
+export const ButtonRecord = styled.TouchableOpacity<PropsRecordButton>`
   width: 70px;
   height: 70px;
-  border-radius: 100;
+  border-radius: ${props => (props.recording ? 10 : 100)};
   background-color: red;
 `;
