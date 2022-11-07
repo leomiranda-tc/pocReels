@@ -13,6 +13,7 @@ import {
   Timeline,
   TopWrapper,
 } from './styles';
+import * as ImagePicker from 'react-native-image-picker';
 
 import {getPermissions} from './utils';
 import {PROGRESS_TIME_MILLISECONDS, PROGRESS_TIME_SECONDS} from './constants';
@@ -50,9 +51,40 @@ export default function Record({navigation}) {
     clearAll();
   }, [clearAll]);
 
-  const goToNext = useCallback(() => {
+  const goToPreview = useCallback(() => {
     navigation.navigate('Preview');
   }, [navigation]);
+
+  function showGallery() {
+    ImagePicker.launchImageLibrary(
+      {
+        mediaType: 'video',
+        includeBase64: true,
+      },
+      response => {
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+          return;
+        }
+        if (response.errorMessage) {
+          console.log('ImagePicker Error: ', response.errorMessage);
+          return;
+        }
+        if (!response.assets || response.assets.length <= 0) {
+          return;
+        }
+
+        const firstAsset = response.assets[0];
+
+        const uri = firstAsset?.uri
+          ?.replace('%2540', '%40')
+          ?.replace('%252F', '%2F')
+          ?.replace('file://', '');
+
+        navigation.navigate('Trim', {uri: uri});
+      },
+    );
+  }
 
   function stopRecord() {
     setRecording(false);
@@ -129,7 +161,7 @@ export default function Record({navigation}) {
         audio
         isActive={true}>
         <TopWrapper>
-          <Button>
+          <Button onPress={showGallery}>
             <Icon name="addfolder" size={30} color="#FFF" />
           </Button>
           <Button onPress={close}>
@@ -142,7 +174,7 @@ export default function Record({navigation}) {
             <Icon name="retweet" size={30} color="#FFF" />
           </Button>
           <ButtonRecord onPress={record} recording={recording} />
-          <Button onPress={goToNext}>
+          <Button onPress={goToPreview}>
             <Icon name="right" size={30} color="#FFF" />
           </Button>
         </BottomWrapper>

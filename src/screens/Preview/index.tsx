@@ -1,10 +1,11 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Alert} from 'react-native';
 
-import {Container, LoadingText, VideoContainer} from './styles';
+import {Container, LoadingText} from './styles';
 import RNVideoEditor from 'react-native-video-editor';
 import useFiles from '@src/hooks/useFiles';
 import {selectFiles} from '@src/hooks/useFiles/selectors';
+import Player from '@src/components/Player';
 
 export default function Preview() {
   const files = useFiles(selectFiles);
@@ -45,5 +46,5 @@ export default function Preview() {
     );
   }
 
-  return <VideoContainer source={{uri: preview}} repeat resizeMode="cover" />;
+  return <Player uri={preview} />;
 }
