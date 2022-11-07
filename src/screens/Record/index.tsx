@@ -70,18 +70,22 @@ export default function Record({navigation}) {
           console.log('ImagePicker Error: ', response.errorMessage);
           return;
         }
-        if (!response.assets || response.assets.length <= 0) {
+        if (
+          !response.assets ||
+          response.assets.length <= 0 ||
+          !response.assets[0].uri
+        ) {
           return;
         }
 
         const firstAsset = response.assets[0];
 
-        const uri = firstAsset?.uri
-          ?.replace('%2540', '%40')
-          ?.replace('%252F', '%2F')
-          ?.replace('file://', '');
+        setVideos({
+          uri: firstAsset.uri,
+          duration: firstAsset.duration,
+        });
 
-        navigation.navigate('Trim', {uri: uri});
+        navigation.navigate('Trim');
       },
     );
   }
