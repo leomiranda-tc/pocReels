@@ -79,7 +79,7 @@ const Trim = ({navigation}) => {
           uri: outputName,
           duration: rangeTime.end - rangeTime.start,
         });
-        navigation.navigate('Preview');
+        navigation.replace('Preview');
 
         return;
       }
@@ -122,6 +122,7 @@ const Trim = ({navigation}) => {
         resizeMode="cover"
         onProgress={onProgressVideo}
       />
+
       <WrapperSlide>
         <RangeSlider
           range={[rangeTime.start, rangeTime.end]}
