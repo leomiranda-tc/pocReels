@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Alert} from 'react-native';
 
-import {VideoContainer} from './styles';
+import {Container, LoadingText, VideoContainer} from './styles';
 import RNVideoEditor from 'react-native-video-editor';
 import useFiles from '@src/hooks/useFiles';
 import {selectFiles} from '@src/hooks/useFiles/selectors';
@@ -36,6 +36,14 @@ export default function Home() {
       mergeVideos();
     }
   }, [files, mergeVideos]);
+
+  if (preview === '') {
+    return (
+      <Container>
+        <LoadingText>Loading</LoadingText>
+      </Container>
+    );
+  }
 
   return <VideoContainer source={{uri: preview}} controls />;
 }
