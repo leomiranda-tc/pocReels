@@ -16,6 +16,7 @@ import {Alert, StyleSheet} from 'react-native';
 import {Button, Container, TopWrapper} from '@src/styles';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {FFmpegKit, ReturnCode} from 'ffmpeg-kit-react-native';
+import {generateNewName, secondToTimeString} from '@src/utils';
 
 let debounceTimer;
 
@@ -64,11 +65,12 @@ const Trim = ({navigation}) => {
   }
 
   function trimVideo() {
-    const outputName =
-      '/var/mobile/Containers/Data/Application/E0388886-DAC8-430D-B1C5-4514A2CA5F47/tmp/output2.mp4';
+    const outputName = generateNewName(file.uri);
 
     FFmpegKit.execute(
-      `-ss 00:00:05 -to 00:00:15 -i ${file.uri} -c copy ${outputName}`,
+      `-ss ${secondToTimeString(rangeTime.start)} -to ${secondToTimeString(
+        rangeTime.end,
+      )} -i ${file.uri} -c copy ${outputName}`,
     ).then(async session => {
       const returnCode = await session.getReturnCode();
 
