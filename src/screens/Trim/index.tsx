@@ -19,6 +19,7 @@ import {FFmpegKit, ReturnCode} from 'ffmpeg-kit-react-native';
 import {generateNewName, secondToTimeString} from '@src/utils';
 
 let debounceTimer;
+let debounceTimerRange;
 
 const Trim = ({navigation}) => {
   const playerRef = useRef<Video>(null);
@@ -32,17 +33,21 @@ const Trim = ({navigation}) => {
   });
 
   function onRangeChange(range: [number, number]) {
-    setRangeTime(oldValue => {
-      if (oldValue.start === range[0] && isBiggerThanMax(range)) {
-        return {start: range[1] - MAX_DURATION_VIDEO, end: range[1]};
-      }
+    clearTimeout(debounceTimerRange);
 
-      if (oldValue.end === range[1] && isBiggerThanMax(range)) {
-        return {start: range[0], end: range[0] + MAX_DURATION_VIDEO};
-      }
+    debounceTimerRange = setTimeout(() => {
+      setRangeTime(oldValue => {
+        if (oldValue.start === range[0] && isBiggerThanMax(range)) {
+          return {start: range[1] - MAX_DURATION_VIDEO, end: range[1]};
+        }
 
-      return {start: range[0], end: range[1]};
-    });
+        if (oldValue.end === range[1] && isBiggerThanMax(range)) {
+          return {start: range[0], end: range[0] + MAX_DURATION_VIDEO};
+        }
+
+        return {start: range[0], end: range[1]};
+      });
+    }, 300);
   }
 
   const close = useCallback(() => {
