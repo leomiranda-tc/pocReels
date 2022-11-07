@@ -15,14 +15,18 @@ import {
 
 import {getPermissions} from './utils';
 import {MAX_DURATION_VIDEO} from '@src/constants';
+import {selectFiles, selectSetFiles} from '@src/hooks/useFiles/selectors';
+
+let counterDurationRecording;
 
 export default function Record({navigation}) {
   const cameraRef = useRef<Camera>(null);
   const devices = useCameraDevices('wide-angle-camera');
   const [frontCamera, setFrontCamera] = useState(true);
   const [recording, setRecording] = useState(false);
-  const setVideos = useFiles(state => state.setFiles);
-  const files = useFiles(state => state.files);
+  const [durationRecording, setDurationRecording] = useState(0);
+  const setVideos = useFiles(selectSetFiles);
+  const files = useFiles(selectFiles);
 
   const device = useMemo(
     () => (frontCamera ? devices.front : devices.back),
@@ -41,9 +45,16 @@ export default function Record({navigation}) {
     setRecording(oldState => !oldState);
 
     if (recording) {
+      setDurationRecording(0);
+      clearInterval(counterDurationRecording);
+
       cameraRef?.current?.stopRecording();
       return;
     }
+
+    counterDurationRecording = setInterval(() => {
+      setDurationRecording(old => old + 0.25);
+    }, 250);
 
     cameraRef?.current?.startRecording({
       flash: 'on',
@@ -62,11 +73,15 @@ export default function Record({navigation}) {
       <BottomTimeline>
         {files.map(file => {
           const percentual = (file.duration / MAX_DURATION_VIDEO) * 100 + '%';
-          return <Timeline width={percentual} />;
+          return <Timeline key={file.uri} width={percentual} />;
         })}
+        <Timeline
+          key="recording"
+          width={(durationRecording / MAX_DURATION_VIDEO) * 100 + '%'}
+        />
       </BottomTimeline>
     );
-  }, [files]);
+  }, [durationRecording, files]);
 
   useEffect(() => {
     getPermissions();

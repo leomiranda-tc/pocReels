@@ -1,20 +1,21 @@
-import React, {useState} from 'react';
-import {Text, Alert} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {Alert} from 'react-native';
 
-import {Container, Button, VideoContainer} from './styles';
+import {VideoContainer} from './styles';
 import RNVideoEditor from 'react-native-video-editor';
 import useFiles from '@src/hooks/useFiles';
+import {selectFiles} from '@src/hooks/useFiles/selectors';
 
 export default function Home() {
-  const files = useFiles(state => state.files);
-
+  const files = useFiles(selectFiles);
   const [preview, setPreview] = useState<string>('');
 
-  function showVideosSelected() {
-    Alert.alert(files.length + ' files selected');
-  }
+  const mergeVideos = useCallback(() => {
+    if (files.length === 1) {
+      setPreview(files[0].uri);
+      return;
+    }
 
-  function mergeVideos() {
     const videos = files.map(file => {
       return file.uri;
     });
@@ -28,22 +29,13 @@ export default function Home() {
         setPreview(file);
       },
     );
-  }
+  }, [files]);
 
-  return (
-    <>
-      <Container>
-        <VideoContainer source={{uri: preview}} controls />
-      </Container>
+  useEffect(() => {
+    if (files.length > 0) {
+      mergeVideos();
+    }
+  }, [files, mergeVideos]);
 
-      <Container>
-        <Button onPress={showVideosSelected}>
-          <Text>Check files Selected</Text>
-        </Button>
-        <Button onPress={mergeVideos}>
-          <Text>Merge Videos</Text>
-        </Button>
-      </Container>
-    </>
-  );
+  return <VideoContainer source={{uri: preview}} controls />;
 }
