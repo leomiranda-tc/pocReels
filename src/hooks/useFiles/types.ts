@@ -1,4 +1,9 @@
+export type File = {
+  uri: string;
+  duration: number;
+};
+
 export type FilesProps = {
-  files: string[];
-  setFiles: (uri: string) => void;
+  files: File[];
+  setFiles: (file: File) => void;
 };

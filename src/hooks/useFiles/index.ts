@@ -1,11 +1,11 @@
 import create from 'zustand';
 
-import {FilesProps} from './types';
+import {FilesProps, File} from './types';
 
 const useFiles = create<FilesProps>(set => ({
   files: [],
-  setFiles: (uri: string) =>
-    set((state: FilesProps) => ({files: [...state.files, uri]})),
+  setFiles: (file: File) =>
+    set((state: FilesProps) => ({files: [...state.files, file]})),
 }));
 
 export default useFiles;
